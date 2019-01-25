@@ -306,7 +306,7 @@ u-boot: fsdata depend version $(SUBDIRS) $(OBJS) $(LIBS) $(LIBS_SHARED) $(LDSCRI
 	      --start-group $(LIBS) $(LIBS_SHARED) \
 	      --end-group $(PLATFORM_LIBS) \
 	      -Map u-boot.map -o u-boot
-	./tools/mips-relocs u-boot
+	#./tools/mips-relocs u-boot
 
 $(LIBS_SHARED):
 	$(MAKE) -C `dirname $@`
@@ -401,6 +401,11 @@ ar933x_common: unconfig config_common
 ar934x_common: unconfig config_common
 	@$(call define_add,CONFIG_WASP,1)
 	@$(call define_add,CONFIG_WASP_SUPPORT,1)
+
+xag_common: unconfig config_common
+	@$(call define_add,CONFIG_WASP,1)
+	@$(call define_add,CONFIG_WASP_SUPPORT,1)
+	@$(call define_add,CONFIG_ATHRS_AR803X_PHY,1)
 
 qca953x_common: unconfig config_common
 	@$(call define_add,CONFIG_ATHEROS,1)
@@ -869,6 +874,60 @@ zbtlink_zbt-we1526: qca953x_common
 	@$(call define_add,CONFIG_USB,1)
 	@$(call define_add,CFG_ATHRS27_PHY,1)
 	@$(call define_add,CFG_ATH_GMAC_NMACS,2)
+	@$(MKCONFIG) -a ap143 mips mips ap143 ar7240 ar7240
+
+#for xlink 16M flash
+xlinkhs: xag_common lsdk_kernel
+	@$(call config_init,XLINKHS,xlinkhs,16,16,1,QCA_AR9342_SOC)
+	@$(call define_add,CONFIG_FOR_XLINKHS,1)
+	@$(call define_add,CONFIG_ATHRS_AR803X_PHY,1)
+	@$(call define_add,CONFIG_USB,1)
+	@$(call define_add,CFG_AG7240_NMACS,1)
+	@$(call define_add,CFG_DUAL_PHY_SUPPORT,1)
+	@$(MKCONFIG) -a db12x mips mips db12x ar7240 ar7240
+
+#for 16M flash
+xag-xlinkhs: xag_common lsdk_kernel
+	@$(call config_init,XAG XLINKHS,xag-xlinkhs,16,16,1,QCA_AR9342_SOC)
+	@$(call define_add,CONFIG_FOR_XAG_XLINKHS,1)
+	@$(call define_add,CONFIG_ATHRS_AR803X_PHY,1)
+	@$(call define_add,CONFIG_USB,1)
+	@$(call define_add,CFG_AG7240_NMACS,1)
+	@$(call define_add,CFG_DUAL_PHY_SUPPORT,1)
+	@$(MKCONFIG) -a db12x mips mips db12x ar7240 ar7240
+
+#for 8M flash
+xag-xlinkhs-8m: xag_common lsdk_kernel
+	@$(call config_init,XAG XLINKHS,xag-xlinkhs,8,16,1,QCA_AR9342_SOC)
+	@$(call define_add,CONFIG_FOR_XAG_XLINKHS_8M,1)
+	@$(call define_add,CONFIG_ATHRS_AR803X_PHY,1)
+	@$(call define_add,CONFIG_USB,1)
+	@$(call define_add,CFG_AG7240_NMACS,1)
+	@$(call define_add,CFG_DUAL_PHY_SUPPORT,1)
+	@$(MKCONFIG) -a db12x mips mips db12x ar7240 ar7240
+
+ligowave: ar934x_common
+	@$(call config_init,MAGIC PRINCE,ligowve,16,21,1,QCA_AR9341_SOC)
+	@$(call define_add,CONFIG_FOR_LIGOWAVE_16M,1)
+	@$(call define_add,CONFIG_USB,1)
+	@$(call define_add,CFG_ATHRS27_PHY,1)
+	@$(call define_add,CFG_AG7240_NMACS,2)
+	@$(MKCONFIG) -a db12x mips mips db12x ar7240 ar7240
+
+ligowave-8M: ar934x_common
+	@$(call config_init,MAGIC PRINCE,ligowve,8,21,1,QCA_AR9341_SOC)
+	@$(call define_add,CONFIG_FOR_LIGOWAVE_8M,1)
+	@$(call define_add,CFG_ATHRS27_PHY,1)
+	@$(call define_add,CFG_AG7240_NMACS,2)
+	@$(MKCONFIG) -a db12x mips mips db12x ar7240 ar7240
+
+wpj531: qca953x_common
+	@$(call config_init,COMPEX WPJ531,wpj531,16,17,1,QCA_QCA9531_SOC)
+	@$(call define_add,CONFIG_FOR_COMPEX_WPJ531,1)
+	@$(call define_add,CONFIG_USB,1)
+	@$(call define_add,CFG_ATHRS27_PHY,1)
+	@$(call define_add,CFG_ATH_GMAC_NMACS,2)
+	@$(call define_add,CONFIG_PCI,1)
 	@$(MKCONFIG) -a ap143 mips mips ap143 ar7240 ar7240
 
 # =============

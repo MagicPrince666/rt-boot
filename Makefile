@@ -52,9 +52,11 @@ export SUB_MAKE_CMD = $(MAKE) --silent --no-print-directory \
 # Define _absolute_ path to your toolchain directory, for example:
 # export TOOLCHAIN_DIR:=/home/user/toolchain-mips_24kc_gcc-5.4.0_musl-1.1.15
 # export PATH:=$(TOOLCHAIN_DIR)/bin:$(PATH)
+# export PATH=/usr/local/opt/coreutils/libexec/gnubin:/usr/local/opt/gnu-sed/libexec/gnubin:$PATH
 
 ifndef CROSS_COMPILE
-  CROSS_COMPILE = mips-openwrt-linux-musl-
+  #CROSS_COMPILE = mips-openwrt-linux-musl-
+  CROSS_COMPILE = /Volumes/WPJ342/xlinkhs/staging_dir/toolchain-mips_24kc_gcc-7.4.0_musl/bin/mips-openwrt-linux-musl-
 endif
 export CROSS_COMPILE
 
@@ -308,6 +310,23 @@ wallys_dr531:
 
 yuncore_cpe870:
 	@$(call build,64,1,ETH_CONFIG=_s27)
+
+COMMON_XAG_AR9342_TARGETS = \
+  xlinkhs \
+  xag-xlinkhs \
+  xag-xlinkhs-8m
+
+
+$(COMMON_XAG_AR9342_TARGETS):
+	@$(call build,192,1,ETH_CONFIG=_ar803x)
+
+
+wpj531:
+	@$(call build,192,1,ETH_CONFIG=_s27)
+
+ligowave \
+ligowave-8M:
+	@$(call build,123,1,ETH_CONFIG=_s27)
 
 # =============
 # CLEAN TARGETS
